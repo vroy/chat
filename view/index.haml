@@ -1,0 +1,22 @@
+%html
+  %head
+    %title Chat
+    %script{:type=> "text/javascript", :src => "jquery.js"}
+    %script{:type=> "text/javascript", :src => "script.js"}
+  %body
+    %form{ :action => Rs(:username), :method => "POST" }
+      %fieldset
+        %input{ :type => :text, :name => :username, :id => :username, :value => session[:username] }
+        %input{ :type => :submit, :value => "Enter username" }
+      
+    %fieldset
+      %textarea#messages{:rows => 20, :cols => "70"}= @messages
+      //#messages= @messages
+          
+    %input{ :type => :submit, :id => :refresh, :value => "Refresh" }
+    
+    %form{ :action => Rs(:message), :method => "POST" }
+      %fieldset
+        %textarea{:name => :message}
+        %input{ :type => :submit, :value => "Send" }
+    
