@@ -1,6 +1,6 @@
 $(document).ready(function() {
   
-  function reload() {
+  setInterval(function() {
     var initial = $('#messages').val();
     
     $.get("messages", { number: 2 }, function(data){
@@ -12,14 +12,6 @@ $(document).ready(function() {
         }, 500);
       }
     });
-  }
-  
-  $("#refresh").click(function() {
-    reload();
-  });
-  
-  setInterval(function() {
-    reload();
   }, 3000);
   
 });
