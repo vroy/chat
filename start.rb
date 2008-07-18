@@ -31,25 +31,30 @@ end
 class MainController < Ramaze::Controller
   
   def index
-    @messages = messages
   end
   
   def messages
     str = ""
-    Message.all do |msg|
-      str << "#{msg.username || 'Anonymous'}: #{msg.message}\n"
+    
+    Message.dataset.order(:id).each do |msg|
+      str << "<p>#{msg.username || 'Anonymous'}: #{msg.message}</p>"
     end
+    
     str
+  end
+  
+  def frame
+    @messages = messages
   end
   
   def message
     Message.create(:username => session[:username], :message => request[:message])
-    redirect :index
+    redirect :/
   end
   
   def username
     session[:username] = request[:username] if request.post?
-    redirect :index
+    redirect :/
   end
   
 end
