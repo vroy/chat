@@ -2,8 +2,13 @@
   %head
     %title Chat
     %script{ :type=> "text/javascript", :src => "jquery.js"}
-    %script{ :type=> "text/javascript", :src => "script.js"}
+    %script{ :type=> "text/javascript", :src => "jquery.scrollTo.js"}
+    %script{ :type=> "text/javascript", :src => "frame.js"}
     %link{ :type => "text/css", :rel => "stylesheet", :href => "style.css" }
   %body
-    #messages=@messages
+    %input{ :type => :hidden, :name => :last, :id => :last, :value => 0 }
+    
+    #messages
+    
+      #end test
     
