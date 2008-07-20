@@ -10,6 +10,14 @@ module Ramaze; module Helper;
       msgs.join("<br/>")
     end
     
+    def title
+      if @title.nil?
+        return "Chat"
+      else
+        return "Chat - #{@title}"
+      end
+    end
+    
   end
   
 end; end

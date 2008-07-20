@@ -37,7 +37,7 @@ class UserController < Ramaze::Controller
         @user.online = Time.now
         @user.save
         session[:user] = @user
-        redirect :/
+        redirect (flash[:redirect] || :/)
       end
     end
   end

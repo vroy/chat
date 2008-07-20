@@ -30,5 +30,6 @@ $(document).ready(function() {
   setInterval(function() {
     reload();
   }, 2000);
+  
 });
 

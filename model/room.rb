@@ -11,3 +11,5 @@ end
 unless Room.table_exists?
   Room.create_table
 end
+
+Room.create :name => "Test"

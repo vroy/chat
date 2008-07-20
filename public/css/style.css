@@ -1,14 +1,39 @@
 .error {
   border: 1px solid red;
   background-color: pink;
+  margin: 5px 0px 5px 0px;
 }
 
 .message {
   border: 1px solid #9c9;
   background-color: #cfc;
+  margin: 5px 0px 5px 0px;
 }
 
-p {
-  margin: 0px;
-  margin-bottom: 2px;
+p { margin: 0px 0px 0px 0px; }
+
+#header {
+  border: 1px solid gray;
+  background-color: #F0F0F0;
+  margin-bottom: 15px;
+  height: 50px;
 }
+
+#header h1 {
+  float:left;
+  margin: 5px 0px 5px 3px;
+}
+
+#header ul { margin: 5px; padding: 5px; float:right;}
+#header ul li { display: inline; }
+#header ul li:before { content: "| "; }
+#header ul li:first-child:before { content: ""; }
+
+#main { margin-left: 0.2em; clear: both;}
+
+a { color: #003399; }
+
+table.list { border-collapse: collapse; }
+table.list td {  border: 1px solid #CCCCCC;  padding: 0.1em 0.5em;
+}
+

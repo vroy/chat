@@ -1,28 +1,40 @@
 !!!
 %html
   %head
-    %title Chat
+    %title= title
+    
+    %meta{ :http_equiv => "Content-Type", :content => "text/html; charset=UTF-8"}/
     
     %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.js')}
+    //%script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.ui.js')}
     %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.scrollTo.js')}
     
     %link{ :type => "text/css", :rel => "stylesheet", :href => Rs('css/style.css') }
     
+    //%link{ :type => "text/css", :rel => "stylesheet", :href => "http://dev.jquery.com/view/tags/ui/latest/themes/flora/flora.all.css" }
+    
   %body
-    %ul
-      - if @logged_in
-        %li
-          = A("logout", :href => R(UserController, :logout))
-          = "(#{@user.name})"
-      - else
-        %li= A("login", :href => R(UserController, :login))
-      
+    #header
+      %h1= title
     
+      %ul
+        %li= A("home", :href => Rs())
     
-    - if flash[:error]
-      .error= flash[:error]
+        - if @logged_in
+          %li
+            = A("logout", :href => R(UserController, :logout))
+            = "(#{@user.name})"
+        - else
+          %li= A("login", :href => R(UserController, :login))
+          %li= A("register", :href => R(UserController, :register))
+            
+    
+    #main
+      - if flash[:error]
+        .error= flash[:error]
       
-    - if flash[:message]
-      .message= flash[:message]
+      - if flash[:message]
+        .message= flash[:message]
       
-    = @content
+      = @content
+    
