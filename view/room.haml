@@ -5,7 +5,11 @@
 %h3= @room.name
   
 %iframe{ :id => "msgs_frame", :src => "/frame", :width => "600px", :height => "300px"}
-  
+
+%select{ :id => "logged_in", :multiple => "multiple", :size => 18 }
+  - @room.users_dataset.filter(:stamp > Time.now - 5).each do |user|
+    %option{ :value => user.id }= user.name
+
 %br/
 %br/
   

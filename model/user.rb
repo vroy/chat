@@ -7,7 +7,7 @@ class User < Sequel::Model
   end
   
   has_many :messages
-  has_many :rooms
+  many_to_many :rooms
   
   validates do
     uniqueness_of :name

@@ -5,11 +5,9 @@ class Room < Sequel::Model
   end
   
   has_many :messages
-  has_many :users
+  many_to_many :users
 end
 
 unless Room.table_exists?
   Room.create_table
 end
-
-Room.create :name => "Test"

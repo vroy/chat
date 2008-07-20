@@ -2,7 +2,6 @@ $(document).ready(function() {
   $("#message").focus();
   
   $("#send").click(function() {
-    
     var msg = $("#message").val();
     var room = $("#room").val();
     

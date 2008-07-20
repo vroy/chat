@@ -3,8 +3,6 @@ class MainController < Ramaze::Controller
   
   helper :aspect, :custom
   
-  #TODO: Before all for @logged_in
-  
   before(:room, :messages, :frame, :message) do
     if session[:user].nil?
       flash[:redirect] = request.url
@@ -19,6 +17,10 @@ class MainController < Ramaze::Controller
   def room(id=nil)
     @room = Room[id]
     
+    if RoomUser[:user_id => session[:user].id, :room_id => id].nil?
+      @room.add_user(session[:user])
+    end
+    
     redirect :/ if @room.nil?
   end
   
@@ -28,7 +30,15 @@ class MainController < Ramaze::Controller
   def messages
     msgs = ""
     
-    Message.dataset.order(:id).each do |msg|
+    room = Room[request[:room]]
+    
+    room_user = RoomUser[:user_id => session[:user].id, :room_id => room.id]
+      
+    unless room_user.nil?
+      room_user.save
+    end
+    
+    Message.filter(:room_id => request[:room]).order(:id).each do |msg|
       msgs << "<p>#{msg.user.name}: #{msg.message}</p>"
     end
     
@@ -37,6 +47,8 @@ class MainController < Ramaze::Controller
   
   deny_layout :message
   def message
+    return {:status => true}.to_json if request[:msg] == "" or request[:msg].nil?
+    
     Message.create(:message => request[:msg], :room => Room[request[:room]], :user => session[:user])
     {:status => true}.to_json
   end
