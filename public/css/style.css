@@ -1,0 +1,14 @@
+.error {
+  border: 1px solid red;
+  background-color: pink;
+}
+
+.message {
+  border: 1px solid #9c9;
+  background-color: #cfc;
+}
+
+p {
+  margin: 0px;
+  margin-bottom: 2px;
+}

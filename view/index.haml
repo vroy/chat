@@ -1,7 +1,9 @@
-!!!
-%h1 Groups
-
+%h2 Rooms
 %ul
-  - Group.all do |group|
-    %li= A(group.title, :href => Rs(:chat, group.title))
-  
+  - Room.all do |room|
+    %li= A(room.name, :href => Rs(:room, room.id))
+
+%h2 Users active in the last 5 minutes
+%ul
+  - User.filter(:online > Time.now - 5*60).each do |user|
+    %li= user.name

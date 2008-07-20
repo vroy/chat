@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title Chat
+    
+    %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.js')}
+    %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.scrollTo.js')}
+    
+    %link{ :type => "text/css", :rel => "stylesheet", :href => Rs('css/style.css') }
+    
+  %body
+    %ul
+      %li= (@logged_in) ? "Logout" : "Login"
+      
+    
+    
+    - if flash[:error]
+      .error= flash[:error]
+      
+    - if flash[:message]
+      .message= flash[:message]
+      
+    = @content

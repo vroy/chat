@@ -1,0 +1,16 @@
+%h1 Login
+
+%form{ :action => Rs(:login), :method => "POST"}
+  %label
+    Username:
+    %input{ :type => :text, :id => :name, :name => :name }
+   
+  %br/
+  
+  %label
+    Password:
+    %input{ :type => :password, :id => :password, :name => :password }
+    
+  %br/
+  
+  %input{ :type => :submit, :value => "Login" }

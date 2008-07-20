@@ -1,0 +1,15 @@
+%script{ :type=> "text/javascript", :src => Rs('js/room.js')}
+
+%input{ :type => :hidden, :id => :room, :name => :room, :value => @room.id }
+
+%h3= @room.name
+  
+%iframe{ :id => "msgs_frame", :src => "/frame", :width => "600px", :height => "300px"}
+  
+%br/
+%br/
+  
+%form{ :onsubmit => "return false;", :action => Rs(:message), :method => "POST" }
+  %input{ :type => :input, :id => :message, :name => :message, :size => 65 }
+  %input{ :type => :submit, :id => :send, :name => :send, :value => "Send" }
+

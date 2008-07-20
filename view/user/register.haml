@@ -1,0 +1,17 @@
+%h1 Register
+
+%form{ :action => Rs(:register), :method => "POST" }
+  %label
+    Username:
+    %input{ :type => :text, :id => :name, :name => :name, :value => @user.name }
+    
+  %br/
+  
+  %label
+    Password:
+    %input{ :type => :password, :id => :password, :name => :password }
+  
+  %br/
+    
+  %input{ :type => :submit, :value => "Register" }
+  
