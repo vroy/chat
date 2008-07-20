@@ -1,0 +1,7 @@
+!!!
+%h1 Groups
+
+%ul
+  - Group.all do |group|
+    %li= A(group.title, :href => Rs(:chat, group.title))
+  

@@ -16,7 +16,7 @@ class Message < Sequel::Model
     text :message
   end
   
-  many_to_one :group
+  many_to_one :room
   
   before_create do |record|
     record.stamp = Time.now
@@ -26,39 +26,51 @@ unless Message.table_exists?
   Message.create_table
 end
 
+class Room < Sequel::Model
+  set_schema do
+    primary_key :id
+    text :title
+  end
+  
+  one_to_many :message
+end
+
+unless Room.table_exists?
+  Room.create_table
+  
+  Room.create :title => "NSS"
+end
 
 class MainController < Ramaze::Controller
   
   def index
-    %(
-    
-    )
   end
   
-  def chat
+  def chat(name=nil)
+    redirect :/ if name.nil?
   end
   
   def messages
-    str = ""
+    message unless request[:message].nil? or request[:message] == ""
+    msgs = ""
     
     last = request[:last] || 0
     
     Message.filter(:id > last).order(:id).each do |msg|
-      str << "<p>#{msg.username || 'Anonymous'}: #{msg.message}</p>"
+      msgs << "<p>#{msg.username || 'Anonymous'}: #{msg.message}</p>"
       last = msg[:id]
     end
     
-    {:last => last, :str => str}.to_json
+    {:last => last, :msgs => msgs}.to_json
   end
   
   def message
     Message.create(:username => session[:username], :message => request[:message])
-    redirect :/
   end
   
   def username
     session[:username] = request[:username] if request.post?
-    redirect :/
+    redirect_referer
   end
   
 end
