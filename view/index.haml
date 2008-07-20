@@ -4,7 +4,3 @@
     %li= A(room.name, :href => Rs(:room, room.id))
   Create a room
   
-%h2 Users active in the last 5 minutes
-%ul
-  - User.filter(:online > Time.now - 5*60).each do |user|
-    %li= user.name
