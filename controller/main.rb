@@ -3,6 +3,12 @@ class MainController < Ramaze::Controller
   
   helper :aspect
   
+  #TODO: Before all for @logged_in
+  before_all do
+    @user = session[:user]
+    @logged_in = !@user.nil?
+  end
+  
   def index
   end
   
