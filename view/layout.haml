@@ -20,13 +20,13 @@
       %ul
         %li= A("home", :href => Rs())
     
-        - if @logged_in
-          %li
-            = A("logout", :href => R(UserController, :logout))
-            = "(#{@user.name})"
-        - else
+        - if session[:user].nil?
           %li= A("login", :href => R(UserController, :login))
           %li= A("register", :href => R(UserController, :register))
+        - else
+          %li
+            = A("logout", :href => R(UserController, :logout))
+            = "(#{session[:user].name})"
             
     
     #main

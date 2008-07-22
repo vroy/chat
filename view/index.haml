@@ -2,5 +2,16 @@
 %ul
   - Room.all do |room|
     %li= A(room.name, :href => Rs(:room, room.id))
-  Create a room
+  
+%form{ :action => Rs(:create_room), :method => "POST"}
+  %label
+    %input{ :type => :text, :id => :room_name, :name => :room_name }
+    %input{ :type => :submit, :value => "Create room" }
+    
+    
+- unless session[:rooms].nil? or session[:rooms].size == 0
+  %h2 Rooms I'm in
+  - session[:rooms].each do |id, room|
+    = room.name
+    %br/
   

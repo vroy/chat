@@ -1,8 +1,11 @@
 class MainController < Ramaze::Controller
   layout '/layout'
-  
+
   helper :aspect, :custom
-  
+
+  # Every action that is an ajax call and returns some json
+  deny_layout :frame, :messages, :users, :message
+
   before(:room, :messages, :frame, :message) do
     if session[:user].nil?
       flash[:redirect] = request.url
@@ -10,53 +13,93 @@ class MainController < Ramaze::Controller
       redirect Rs(UserController, :login);
     end
   end
-  
+
   def index
   end
-  
+
+  # Page that does everything and contains the javascript.
   def room(id=nil)
     @room = Room[id]
+
+    @room.add_user(session[:user])
     
-    if RoomUser[:user_id => session[:user].id, :room_id => id].nil?
-      @room.add_user(session[:user])
-    end
+    session[:rooms] = {} if session[:rooms].nil?
+      
+    session[:rooms][@room.id] = @room
     
+    #TODO: Remove all the rooms that are not in use right now.
     redirect :/ if @room.nil?
   end
   
-  deny_layout :frame
-  
-  deny_layout :messages
-  def messages
-    msgs = ""
-    
-    room = Room[request[:room]]
-    
-    room_user = RoomUser[:user_id => session[:user].id, :room_id => room.id]
+  # action that quits a room
+  def quit
+    if request.post?
+      room_id = request[:room].to_i
       
-    unless room_user.nil?
-      room_user.save
+      #DB.execute(RoomUser.filter(:room_id => room_id, :user_id => session[:user].id).delete_sql)
+      RoomUser.filter(:room_id => room_id, :user_id => session[:user].id).delete
+      
+      session[:rooms].delete(room_id)
     end
+  end
+  
+  # action that creates a form
+  def create_room
+    if request.post?
+      room = Room.create :name => request[:room_name]
     
+      redirect Rs(:room, room.id)
+    end
+  end
+
+  #############################################################################
+  #################################################################### AJAX ###
+  #############################################################################
+
+  # Ajax call that returns the messages for a certain room and update the table
+  # that contains the relation between the users and the rooms so it can be
+  # showed to the users
+  def messages
+    RoomUser[:user_id => session[:user].id, :room_id => request[:room]].save
+
+    msgs = ""
     Message.filter(:room_id => request[:room]).order(:id).each do |msg|
       msgs << "<p>#{msg.user.name}: #{msg.message}</p>"
     end
-    
+
     {:msgs => msgs}.to_json
   end
-  
-  deny_layout :message
+
+
+  # Ajax call that populates the users list in the room. Based on the users that
+  # refreshed the messages in the last 5 seconds (based on the 2 seconds polling)
+  def users
+    str = ""
+
+    Room[request[:room]].users_dataset.filter(:stamp > Time.now - 5).each do |user|
+      str << "<option>#{user.name}</option>"
+    end
+
+    {:users => str}.to_json
+  end
+
+
+  # Ajax call that inserts a message if the msg receive is not nil or empty
   def message
     return {:status => true}.to_json if request[:msg] == "" or request[:msg].nil?
-    
+
     Message.create(:message => request[:msg], :room => Room[request[:room]], :user => session[:user])
+
     {:status => true}.to_json
   end
-  
+
+  #############################################################################
+  ########################################################## ERROR HANDLING ###
+  #############################################################################
   def error
     flash[:error] = "Page not found."
     redirect :/
   end
-  
+
 end
 

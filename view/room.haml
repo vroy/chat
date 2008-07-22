@@ -2,13 +2,15 @@
 
 %input{ :type => :hidden, :id => :room, :name => :room, :value => @room.id }
 
-%h3= @room.name
-  
-%iframe{ :id => "msgs_frame", :src => "/frame", :width => "600px", :height => "300px"}
+%h3{:style => "float:left;"}= @room.name
+%button#quit{:style => "float:right;"} Quit
 
-%select{ :id => "logged_in", :multiple => "multiple", :size => 18 }
-  - @room.users_dataset.filter(:stamp > Time.now - 5).each do |user|
-    %option{ :value => user.id }= user.name
+#chat{:style => "clear:both;"}
+  #msgs_frame
+    #messages
+    #end
+
+  %select#logged_in{ :multiple => "multiple", :size => 25 }
 
 %br/
 %br/
@@ -16,4 +18,4 @@
 %form{ :onsubmit => "return false;", :action => Rs(:message), :method => "POST" }
   %input{ :type => :input, :id => :message, :name => :message, :size => 65 }
   %input{ :type => :submit, :id => :send, :name => :send, :value => "Send" }
-
+  
