@@ -21,36 +21,25 @@ $(document).ready(function() {
     location.href = "/";
   });
   
-  function reload(msg) {
-    var room = $("#room").val();
-    
-    $.getJSON("/messages", {'room':room}, function(data) {
+  function reload() {
+    $.getJSON("/reload", {'room':$("#room").val()}, function(data) {
       $("#messages").html(data["msgs"]);
-    });
-  }
-  
-  function reload_users() {
-    var room = $("#room").val();
-    
-    $.getJSON("/users", {'room': room}, function(data) {
-      $("#logged_in").html(data["users"]);
+      
+      $("#users").html(data["users"]);
     });
   }
   
   $(window).load(function() {
     setTimeout(function() {
       reload();
-      reload_users();
-      $("#msgs_frame").scrollTo($("#end"));
-    }, 200);
+      setTimeout(function() {
+        $("#msgs_frame").scrollTo($("#end"));
+      }, 300);
+    }, 300);
   });
   
   setInterval(function() {
     reload();
-  }, 5000);
-  
-  setInterval(function() {
-    reload_users();
   }, 5000);
   
 });

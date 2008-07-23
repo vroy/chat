@@ -40,14 +40,18 @@ table.list td {  border: 1px solid #CCCCCC;  padding: 0.1em 0.5em;
 #chat {
   width: 100%;
   border: 1px solid black;
+  clear: both;
+  height: 430px;
+  margin-bottom: 10px;
 }
 
-#logged_in { width: 10%; }
+#users { width: 10%; height: 100%; }
 
 #msgs_frame {
-  height:426px;
   width: 90%;
   overflow: auto;
   float:left;
+  height: 430px;
 }
 
+#message { width: 90%; }

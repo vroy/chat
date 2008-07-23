@@ -3,9 +3,6 @@ class MainController < Ramaze::Controller
 
   helper :aspect, :custom
 
-  # Every action that is an ajax call and returns some json
-  deny_layout :frame, :messages, :users, :message
-
   before(:room, :messages, :frame, :message) do
     if session[:user].nil?
       flash[:redirect] = request.url
@@ -53,9 +50,37 @@ class MainController < Ramaze::Controller
   end
 
   #############################################################################
+  ########################################################## ERROR HANDLING ###
+  #############################################################################
+  def error
+    flash[:error] = "Page not found."
+    redirect :/
+  end
+
+  #############################################################################
   #################################################################### AJAX ###
   #############################################################################
+  
+  # Deny layout to ajax call and returns some json
+  deny_layout :reload, :messages, :users, :message
+  
+  # Combine both
+  def reload
+    {:users => users, :msgs => messages}.to_json
+  end
+  
 
+  # Ajax call that inserts a message if the msg receive is not nil or empty
+  def message
+    return {:status => true}.to_json if request[:msg] == "" or request[:msg].nil?
+
+    Message.create(:message => request[:msg], :room => Room[request[:room]], :user => session[:user])
+
+    {:status => true}.to_json
+  end
+  
+  
+  private
   # Ajax call that returns the messages for a certain room and update the table
   # that contains the relation between the users and the rooms so it can be
   # showed to the users
@@ -67,38 +92,20 @@ class MainController < Ramaze::Controller
       msgs << "<p>#{msg.user.name}: #{msg.message}</p>"
     end
 
-    {:msgs => msgs}.to_json
+    msgs
   end
 
 
   # Ajax call that populates the users list in the room. Based on the users that
   # refreshed the messages in the last 5 seconds (based on the 2 seconds polling)
   def users
-    str = ""
+    users = ""
 
-    Room[request[:room]].users_dataset.filter(:stamp > Time.now - 5).each do |user|
-      str << "<option>#{user.name}</option>"
+    Room[request[:room]].users_dataset.filter(:stamp > Time.now - 15).each do |user|
+      users << "<option>#{user.name}</option>"
     end
-
-    {:users => str}.to_json
-  end
-
-
-  # Ajax call that inserts a message if the msg receive is not nil or empty
-  def message
-    return {:status => true}.to_json if request[:msg] == "" or request[:msg].nil?
-
-    Message.create(:message => request[:msg], :room => Room[request[:room]], :user => session[:user])
-
-    {:status => true}.to_json
-  end
-
-  #############################################################################
-  ########################################################## ERROR HANDLING ###
-  #############################################################################
-  def error
-    flash[:error] = "Page not found."
-    redirect :/
+    
+    users
   end
 
 end

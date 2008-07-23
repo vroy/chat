@@ -5,17 +5,15 @@
 %h3{:style => "float:left;"}= @room.name
 %button#quit{:style => "float:right;"} Quit
 
-#chat{:style => "clear:both;"}
+#chat
   #msgs_frame
     #messages
     #end
 
-  %select#logged_in{ :multiple => "multiple", :size => 25 }
+  %select#users{ :multiple => "multiple"}
 
-%br/
-%br/
   
 %form{ :onsubmit => "return false;", :action => Rs(:message), :method => "POST" }
-  %input{ :type => :input, :id => :message, :name => :message, :size => 65 }
+  %input{ :type => :input, :id => :message, :name => :message }
   %input{ :type => :submit, :id => :send, :name => :send, :value => "Send" }
   
