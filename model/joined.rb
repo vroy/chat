@@ -1,4 +1,4 @@
-class RoomUser < Sequel::Model(:rooms_users)
+class Joined < Sequel::Model(:joined)
   set_schema do
     primary_key :id
     integer :room_id
@@ -9,6 +9,6 @@ class RoomUser < Sequel::Model(:rooms_users)
   before_save do |record|
     record.stamp = Time.now
   end
+  
+  create_table unless table_exists?
 end
-
-RoomUser.create_table unless RoomUser.table_exists?

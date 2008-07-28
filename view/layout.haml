@@ -6,12 +6,11 @@
     %meta{ :http_equiv => "Content-Type", :content => "text/html; charset=UTF-8"}/
     
     %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.js')}
-    //%script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.ui.js')}
+    %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.ui.js')}
     %script{ :type=> "text/javascript", :src => Rs('js/lib/jquery.scrollTo.js')}
     
     %link{ :type => "text/css", :rel => "stylesheet", :href => Rs('css/style.css') }
-    
-    //%link{ :type => "text/css", :rel => "stylesheet", :href => "http://dev.jquery.com/view/tags/ui/latest/themes/flora/flora.all.css" }
+    %link{ :type => "text/css", :rel => "stylesheet", :href => Rs('css/tabs.css') }
     
   %body
     #header
@@ -27,14 +26,26 @@
           %li
             = A("logout", :href => R(UserController, :logout))
             = "(#{session[:user].name})"
-            
     
+    #tabs
+      %ul
+        %li
+          %span
+            %a{:href => '/'} Rooms
+      
+        - unless session[:rooms].nil?
+          - session[:rooms].each do |id, room|
+            %li
+              %span
+                %a{:href => "/room/#{id}"}= room.name
+                %button#quit{ :value => id } X
+          
     #main
       - if flash[:error]
         .error= flash[:error]
       
       - if flash[:message]
         .message= flash[:message]
-      
+        
       = @content
-    
+      

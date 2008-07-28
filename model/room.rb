@@ -5,9 +5,7 @@ class Room < Sequel::Model
   end
   
   has_many :messages
-  many_to_many :users
-end
-
-unless Room.table_exists?
-  Room.create_table
+  many_to_many :users, :join_table => :joined
+  
+  create_table unless table_exists?
 end

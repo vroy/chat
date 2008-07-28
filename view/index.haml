@@ -7,11 +7,3 @@
   %label
     %input{ :type => :text, :id => :room_name, :name => :room_name }
     %input{ :type => :submit, :value => "Create room" }
-    
-    
-- unless session[:rooms].nil? or session[:rooms].size == 0
-  %h2 Rooms I'm in
-  - session[:rooms].each do |id, room|
-    = room.name
-    %br/
-  

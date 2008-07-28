@@ -7,7 +7,7 @@ class User < Sequel::Model
   end
   
   has_many :messages
-  many_to_many :rooms
+  many_to_many :rooms, :join_table => :joined
   
   validates do
     uniqueness_of :name
@@ -15,8 +15,5 @@ class User < Sequel::Model
     presence_of :password
   end
   
-end
-
-unless User.table_exists?
-  User.create_table
+  create_table unless table_exists?
 end

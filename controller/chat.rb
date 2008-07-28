@@ -1,6 +1,8 @@
-class MainController < Ramaze::Controller
+class ChatController < Ramaze::Controller
   layout '/layout'
-
+  
+  map '/'
+  
   helper :aspect, :custom
 
   before(:room, :messages, :frame, :message) do
@@ -13,7 +15,7 @@ class MainController < Ramaze::Controller
 
   def index
   end
-
+  
   # Page that does everything and contains the javascript.
   def room(id=nil)
     @room = Room[id]
@@ -34,7 +36,7 @@ class MainController < Ramaze::Controller
       room_id = request[:room].to_i
       
       #DB.execute(RoomUser.filter(:room_id => room_id, :user_id => session[:user].id).delete_sql)
-      RoomUser.filter(:room_id => room_id, :user_id => session[:user].id).delete
+      Joined.filter(:room_id => room_id, :user_id => session[:user].id).delete
       
       session[:rooms].delete(room_id)
     end
@@ -85,7 +87,7 @@ class MainController < Ramaze::Controller
   # that contains the relation between the users and the rooms so it can be
   # showed to the users
   def messages
-    RoomUser[:user_id => session[:user].id, :room_id => request[:room]].save
+    Joined[:user_id => session[:user].id, :room_id => request[:room]].save
 
     msgs = ""
     Message.filter(:room_id => request[:room]).order(:id).each do |msg|

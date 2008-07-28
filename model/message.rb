@@ -13,9 +13,6 @@ class Message < Sequel::Model
   before_create do |record|
     record.stamp = Time.now
   end
+  
+  create_table unless table_exists?
 end
-
-unless Message.table_exists?
-  Message.create_table
-end
-

@@ -17,7 +17,7 @@ $(document).ready(function() {
   });
   
   $("#quit").click(function() {
-    $.post("/quit", {'room': $("#room").val()});
+    $.post("/quit", {'room': $(this).val()});
     location.href = "/";
   });
   
