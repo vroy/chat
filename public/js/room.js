@@ -1,46 +1,74 @@
 $(document).ready(function() {
-  $("#message").focus();
-  
-  $("#send").click(function() {
-    var msg = $("#message").val();
-    var room = $("#room").val();
-    
-    $("#message").val("");
-    
-    $.getJSON("/message", {'msg': msg, 'room': room }, function(data) {
-      reload();
-    });
-    
+
+/******************************************************************************
+******************************************************************** Onload ***
+******************************************************************************/
+$("#message").focus();
+$("#message").growfield({animate: false});
+
+$(window).load(function() {
+  setTimeout(function() {
+    reload();
     setTimeout(function() {
       $("#msgs_frame").scrollTo($("#end"));
-    }, 400);
-  });
-  
-  $("#quit").click(function() {
-    $.post("/quit", {'room': $(this).val()});
-    location.href = "/";
-  });
-  
-  function reload() {
-    $.getJSON("/reload", {'room':$("#room").val()}, function(data) {
-      $("#messages").html(data["msgs"]);
-      
-      $("#users").html(data["users"]);
-    });
-  }
-  
-  $(window).load(function() {
-    setTimeout(function() {
-      reload();
-      setTimeout(function() {
-        $("#msgs_frame").scrollTo($("#end"));
-      }, 300);
     }, 300);
+  }, 300);
+});
+
+/******************************************************************************
+******************************************************** Keyboard Shortcuts ***
+******************************************************************************/
+$.hotkeys.add('return', function(){ send(); });
+
+$.hotkeys.add('Shift+return', function(){
+  $("#message").val($("#message").val() + "\n");
+});
+
+/******************************************************************************
+******************************************************************* Actions ***
+******************************************************************************/
+$("#send").click(function() { send(); });
+
+$("#quit").click(function() {
+  $.post("/quit", {'room': $(this).val()});
+  location.href = "/";
+});
+
+
+/******************************************************************************
+******************************************************************* Threads ***
+******************************************************************************/
+setInterval(function() {
+  reload();
+}, 5000);
+
+/******************************************************************************
+*********************************************************************** DRY ***
+******************************************************************************/
+
+function send() {
+  var msg = $("#message").val();
+  var room = $("#room").val();
+  
+  $("#message").val("");
+  
+  $.getJSON("/message", {'msg': msg, 'room': room }, function(data) {
+    reload();
+    $("#message").focus();
   });
   
-  setInterval(function() {
-    reload();
-  }, 5000);
-  
+  setTimeout(function() {
+    $("#msgs_frame").scrollTo($("#end"));
+  }, 400);
+}
+
+function reload() {
+  $.getJSON("/reload", {'room':$("#room").val()}, function(data) {
+    $("#messages").html(data["msgs"]);
+    
+    $("#users").html(data["users"]);
+  });
+}
+
 });
 
